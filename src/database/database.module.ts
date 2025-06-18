@@ -1,9 +1,10 @@
-import { Logger, Module } from '@nestjs/common';
+import { Global, Logger, Module } from '@nestjs/common';
 import { Pool } from 'pg';
 
 import { PG_POOL } from '@Database/database.constants';
 import { pgConfigOptions } from '@Database/database-config-options';
 
+@Global()
 @Module({
   providers: [
     {
@@ -18,7 +19,6 @@ import { pgConfigOptions } from '@Database/database-config-options';
         /** try to connect to the Postgres database */
         try {
           const client = await pool.connect();
-          await client.query('SELECT 1'); // optional: basic health check
           client.release();
           logger.log('Postgres connected successfully.');
         } catch (err) {

@@ -41,7 +41,12 @@ module.exports = {
                 '^(@Src)(/.*|$)',
                 '^(@Common)(/.*|$)',
                 '^(@Config)(/.*|$)',
-                '^(@Database)(/.*|$)'
+                '^(@Database)(/.*|$)',
+                '^(@Decorators)(/.*|$)',
+                '^(@Filters)(/.*|$)',
+                '^(@Guards)(/.*|$)',
+                '^(@Helpers)(/.*|$)',
+                '^(@Modules)(/.*|$)',
               ],
               [
                 '^\\.\\.(?!/?$)',

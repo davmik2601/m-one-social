@@ -1,12 +1,28 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 
 import { DatabaseModule } from '@Database/database.module';
+import { AllExceptionsFilter } from '@Filters/all-exceptions.filter';
+import { JwtAuthGuard } from '@Guards/jwt-auth.guard';
+import { AuthModule } from '@Modules/auth/auth.module';
+import { UserModule } from '@Modules/user/user.module';
 
 import { AppController } from './app.controller';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    DatabaseModule,
+    AuthModule,
+    UserModule,
+  ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    { provide: APP_FILTER, useClass: AllExceptionsFilter },
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+  ],
 })
 export class AppModule {}

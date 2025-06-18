@@ -24,7 +24,15 @@
       "@Config/*": ["src/config/*"],
 
       // Database
-      "@Database/*": ["src/database/*"]
+      "@Database/*": ["src/database/*"],
+
+      "@Decorators/*": ["src/decorators/*"],
+      "@Filters/*": ["src/filters/*"],
+      "@Guards/*": ["src/guards/*"],
+      "@Helpers/*": ["src/helpers/*"],
+
+      // Modules
+      "@Modules/*": ["src/modules/*"],
     }
   }
 }

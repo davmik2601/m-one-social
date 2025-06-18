@@ -6,7 +6,12 @@ export function setupSwagger(app: INestApplication): void {
     .setTitle('API')
     .setDescription('M-One Social Project (test task)')
     .setVersion('3.1.0')
-    .addBearerAuth()
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      in: 'header',
+    })
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('docs', app, document);

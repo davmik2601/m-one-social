@@ -78,14 +78,7 @@ export class BaseRepository<T> {
   /** Basic FindAll method, with options for where, select, order, skip, and take */
   async findAll(options: FindAllOptions<T> = {}): Promise<T[]> {
     const { where = {}, select, order, skip, take } = options;
-
-    const filterKeys = Object.keys(where);
-    const filterValues = Object.values(where);
-
-    const whereClause = filterKeys.length
-      ? 'WHERE ' +
-        filterKeys.map((key, idx) => `"${key}" = $${idx + 1}`).join(' AND ')
-      : '';
+    const { clause: whereClause, values } = this.buildWhereClause(where);
 
     const selectedFields =
       select && select.length
@@ -99,8 +92,8 @@ export class BaseRepository<T> {
           .join(', ')
       : '';
 
-    const offsetClause = typeof skip === 'number' ? `OFFSET ${skip}` : '';
-    const limitClause = typeof take === 'number' ? `LIMIT ${take}` : '';
+    const offsetClause = skip ? `OFFSET ${skip}` : '';
+    const limitClause = take ? `LIMIT ${take}` : '';
 
     const query = `
         SELECT ${selectedFields} 
@@ -109,7 +102,7 @@ export class BaseRepository<T> {
         ${orderClause} 
         ${limitClause} 
         ${offsetClause}`.trim();
-    const result = await this.pool.query(query, filterValues);
+    const result = await this.pool.query(query, values);
 
     return result.rows;
   }
@@ -121,10 +114,35 @@ export class BaseRepository<T> {
     return results[0] || null;
   }
 
+  async count(where: Partial<T> = {}): Promise<number> {
+    const { clause: whereClause, values } = this.buildWhereClause(where);
+
+    const query = `SELECT COUNT(*) FROM "${this.tableName}" ${whereClause}`;
+    const result = await this.pool.query(query, values);
+    return parseInt(result.rows[0].count, 10);
+  }
+
   /** Basic Delete method, which deletes a record by its ID */
   async delete(id: number): Promise<QueryResult> {
     const query = `DELETE FROM ${this.tableName} WHERE id = $1`;
 
     return this.pool.query(query, [id]);
+  }
+
+  /** Helper methods * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+  private buildWhereClause(where: Partial<T>): {
+    clause: string;
+    values: any[];
+  } {
+    const keys = Object.keys(where);
+    const values = Object.values(where);
+
+    const clause = keys.length
+      ? 'WHERE ' +
+        keys.map((key, idx) => `"${key}" = $${idx + 1}`).join(' AND ')
+      : '';
+
+    return { clause, values };
   }
 }

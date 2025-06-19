@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Query } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -9,7 +9,9 @@ import {
 import { ReqUserType } from '@Common/types/req-user.type';
 import { AuthUser } from '@Decorators/auth-user.decorator';
 import { UpdateMeDto } from '@Modules/user/dto/update-me.dto';
+import { UserSearchDto } from '@Modules/user/dto/user-search.dto';
 import { GetMeType } from '@Modules/user/types/get-me.type';
+import { UserListType } from '@Modules/user/types/user-list.type';
 import { UserService } from '@Modules/user/user.service';
 
 @ApiTags('Users')
@@ -33,5 +35,12 @@ export class UserController {
     @Body() data: UpdateMeDto,
   ): Promise<GetMeType> {
     return this.userService.updateMe(user, data);
+  }
+
+  @Get('/search')
+  @ApiOperation({ summary: 'Update me' })
+  @ApiResponse({ type: UserListType })
+  async search(@Query() data: UserSearchDto): Promise<UserListType> {
+    return this.userService.search(data);
   }
 }

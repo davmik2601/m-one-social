@@ -6,6 +6,8 @@ import { DatabaseModule } from '@Database/database.module';
 import { AllExceptionsFilter } from '@Filters/all-exceptions.filter';
 import { JwtAuthGuard } from '@Guards/jwt-auth.guard';
 import { AuthModule } from '@Modules/auth/auth.module';
+import { FriendModule } from '@Modules/friend/friend.module';
+import { FriendRequestModule } from '@Modules/friend-request/friend-request.module';
 import { UserModule } from '@Modules/user/user.module';
 
 import { AppController } from './app.controller';
@@ -18,6 +20,8 @@ import { AppController } from './app.controller';
     DatabaseModule,
     AuthModule,
     UserModule,
+    FriendRequestModule,
+    FriendModule,
   ],
   controllers: [AppController],
   providers: [

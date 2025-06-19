@@ -43,7 +43,7 @@ export class UserService {
 
   async search({
     skip = 0,
-    take = 100,
+    take = 10,
     q,
   }: UserSearchDto): Promise<UserListType> {
     // if no any q searchTerm, return empty array with total count of users

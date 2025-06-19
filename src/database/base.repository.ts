@@ -3,6 +3,7 @@ import { Pool, QueryResult } from 'pg';
 import {
   FindAllOptions,
   FindOneOptions,
+  WhereCondition,
 } from '@Database/types/find-options.interface';
 
 /** Original code by: davmik2601, */
@@ -114,7 +115,7 @@ export class BaseRepository<T> {
     return results[0] || null;
   }
 
-  async count(where: Partial<T> = {}): Promise<number> {
+  async count(where: WhereCondition<T> = {}): Promise<number> {
     const { clause: whereClause, values } = this.buildWhereClause(where);
 
     const query = `SELECT COUNT(*) FROM "${this.tableName}" ${whereClause}`;
@@ -131,17 +132,40 @@ export class BaseRepository<T> {
 
   /** Helper methods * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-  private buildWhereClause(where: Partial<T>): {
+  private buildWhereClause(
+    where: WhereCondition<T>,
+    alias = '',
+  ): {
     clause: string;
     values: any[];
   } {
-    const keys = Object.keys(where);
-    const values = Object.values(where);
+    const conditions: string[] = [];
+    const values: any[] = [];
+    let paramIndex = 1;
 
-    const clause = keys.length
-      ? 'WHERE ' +
-        keys.map((key, idx) => `"${key}" = $${idx + 1}`).join(' AND ')
-      : '';
+    const prefix = alias ? `${alias}.` : '';
+
+    if ('$or' in where && Array.isArray(where.$or)) {
+      const orConditions = where.$or.map((cond: Partial<T>) => {
+        return Object.entries(cond)
+          .map(([key, value]) => {
+            values.push(value);
+            return `${prefix}"${key}" = $${paramIndex++}`;
+          })
+          .join(' AND ');
+      });
+
+      if (orConditions.length) {
+        conditions.push(`(${orConditions.map((c) => `(${c})`).join(' OR ')})`);
+      }
+    } else {
+      for (const [key, value] of Object.entries(where)) {
+        values.push(value);
+        conditions.push(`${prefix}"${key}" = $${paramIndex++}`);
+      }
+    }
+
+    const clause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
 
     return { clause, values };
   }

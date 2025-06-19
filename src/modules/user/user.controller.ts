@@ -40,7 +40,7 @@ export class UserController {
   @Get('/search')
   @ApiOperation({ summary: 'Update me' })
   @ApiResponse({ type: UserListType })
-  async search(@Query() data: UserSearchDto): Promise<UserListType> {
-    return this.userService.search(data);
+  async search(@Query() qData: UserSearchDto): Promise<UserListType> {
+    return this.userService.search(qData);
   }
 }

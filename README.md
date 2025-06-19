@@ -43,7 +43,9 @@ $ yarn install
 1. First of all create db in your PostgreSQL server for the project 
 and set up the environment variables in `.env` file (check `.env.example` for reference). 
 
-2. Then you can run the following commands to compile and run the project:
+2. Please use **Node 20.x** versions
+
+3. Then you can run the following commands to compile and run the project:
 
 ```bash
 # (first of all run all migrations)

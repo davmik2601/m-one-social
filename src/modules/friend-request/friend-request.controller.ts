@@ -46,7 +46,7 @@ export class FriendRequestController {
   }
 
   @Get('/')
-  @ApiOperation({ summary: 'Accept or Decline friend request' })
+  @ApiOperation({ summary: 'Get friend requests' })
   @ApiResponse({ type: FriendRequestListType })
   async getFriendRequests(
     @AuthUser() user: ReqUserType,

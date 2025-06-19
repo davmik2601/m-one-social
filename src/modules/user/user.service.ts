@@ -55,6 +55,7 @@ export class UserService {
     return this.userRepository.search(q, {
       skip,
       take,
+      select: ['id', 'firstName', 'lastName', 'age'],
     });
   }
 }

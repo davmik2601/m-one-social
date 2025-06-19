@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { UserType } from '@Modules/user/types/user.type';
+import { UserInfoType } from '@Modules/user/types/user-info.type';
 
 export class UserListType {
   @ApiProperty()
   total: number;
 
-  @ApiProperty({ type: () => [UserType] })
-  users: UserType[];
+  @ApiProperty({ type: () => [UserInfoType] })
+  users: UserInfoType[];
 }

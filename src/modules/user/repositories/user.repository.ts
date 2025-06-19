@@ -132,7 +132,12 @@ export class UserRepository extends BaseRepository<User> {
     ]);
 
     return {
-      users: result.rows,
+      users: result.rows.map((row) => {
+        // remove match_score and password from the result
+        delete row.match_score;
+        delete row.password;
+        return row;
+      }),
       total: parseInt(total.rows[0].count, 10),
     };
   }

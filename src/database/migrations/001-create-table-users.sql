@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS users (
     "age"           INTEGER         NOT NULL CHECK ("age" >= 18 AND "age" <= 99),
     "email"         VARCHAR(100)    UNIQUE NOT NULL,
     "password"      VARCHAR         NOT NULL
-    );
+);

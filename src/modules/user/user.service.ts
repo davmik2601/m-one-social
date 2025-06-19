@@ -5,10 +5,10 @@ import { FindOneOptions } from '@Database/types/find-options.interface';
 import { CreateUserDto } from '@Modules/user/dto/create-user.dto';
 import { UpdateMeDto } from '@Modules/user/dto/update-me.dto';
 import { UserSearchDto } from '@Modules/user/dto/user-search.dto';
+import { UserRepository } from '@Modules/user/repositories/user.repository';
 import { GetMeType } from '@Modules/user/types/get-me.type';
 import { User } from '@Modules/user/types/user.model';
 import { UserListType } from '@Modules/user/types/user-list.type';
-import { UserRepository } from '@Modules/user/user.repository';
 
 @Injectable()
 export class UserService {

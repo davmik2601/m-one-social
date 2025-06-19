@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS friend_requests (
     "updatedAt"     TIMESTAMP       DEFAULT NOW(),
     "senderId"      INTEGER         REFERENCES users(id) ON DELETE CASCADE,
     "receiverId"    INTEGER         REFERENCES users(id) ON DELETE CASCADE,
-    "status"        friend_requests_status NOT NULL DEFAULT 'PENDING',
+    "status"        friend_requests_status NOT NULL DEFAULT 'PENDING'
 );
